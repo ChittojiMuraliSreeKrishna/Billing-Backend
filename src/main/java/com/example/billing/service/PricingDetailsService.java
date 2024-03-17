@@ -25,20 +25,17 @@ public class PricingDetailsService {
 	public PricingDetails updatePricingDetailsByProductId(Long productId, PricingDetails newPricingDetails) {
 		PricingDetails existingPricingDetails = pricingDetailsRepository.findByProduct_Id(productId);
 		if (existingPricingDetails != null) {
-			// Update existing pricing details with new values
 			existingPricingDetails.setPrice(newPricingDetails.getPrice());
 			existingPricingDetails.setStonePrice(newPricingDetails.getStonePrice());
-			existingPricingDetails.setMetalValue(newPricingDetails.getMetalValue());
+			existingPricingDetails.setMetalPrice(newPricingDetails.getMetalPrice());
 			existingPricingDetails.setVadd(newPricingDetails.getVadd());
 			existingPricingDetails.setVaddDiscount(newPricingDetails.getVaddDiscount());
 			existingPricingDetails.setTaxableAmount(newPricingDetails.getTaxableAmount());
 			existingPricingDetails.setCgst(newPricingDetails.getCgst());
 			existingPricingDetails.setSgst(newPricingDetails.getSgst());
-			// Save and return updated pricing details
+			// Save updated pricing details
 			return pricingDetailsRepository.save(existingPricingDetails);
 		}
-		// If pricing details not found, return null or throw an exception as per your
-		// requirement
 		return null;
 	}
 

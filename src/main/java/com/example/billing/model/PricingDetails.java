@@ -39,10 +39,10 @@ public class PricingDetails {
 	@Column(name = "stone_price")
 	private Double stonePrice;
 
-	@NotNull(message = "Product metal value is required.")
-	@Min(value = 0, message = "Product metal value must be non-negative.")
-	@Column(name = "metal_value")
-	private Double metalValue;
+	@NotNull(message = "Product metal price is required.")
+	@Min(value = 0, message = "Product metal price must be non-negative.")
+	@Column(name = "metal_price")
+	private Double metalPrice;
 
 	@NotNull(message = "Value added tax (VAT) is required.")
 	@Min(value = 0, message = "Value added tax (VAT) must be non-negative.")
@@ -100,12 +100,12 @@ public class PricingDetails {
 		this.stonePrice = stonePrice;
 	}
 
-	public Double getMetalValue() {
-		return metalValue;
+	public Double getMetalPrice() {
+		return metalPrice;
 	}
 
-	public void setMetalValue(Double metalValue) {
-		this.metalValue = metalValue;
+	public void setMetalPrice(Double metalPrice) {
+		this.metalPrice = metalPrice;
 	}
 
 	public Double getVadd() {

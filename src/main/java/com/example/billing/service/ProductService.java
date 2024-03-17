@@ -41,7 +41,7 @@ public class ProductService {
 		pricingDetails.setProduct(savedProduct);
 		pricingDetails.setPrice(productWithPricingDTO.getProductPrice());
 		pricingDetails.setStonePrice(productWithPricingDTO.getProductStonePrice());
-		pricingDetails.setMetalValue(productWithPricingDTO.getProductMetalValue());
+		pricingDetails.setMetalPrice(productWithPricingDTO.getProductMetalPrice());
 		pricingDetails.setVadd(productWithPricingDTO.getProductVadd());
 		pricingDetails.setVaddDiscount(productWithPricingDTO.getProductVaddDiscount());
 		pricingDetails.setCgst(productWithPricingDTO.getProductCgst());
@@ -70,11 +70,11 @@ public class ProductService {
 			productWithPricingDTO.setProductNetWeight(product.getNetWeight());
 			productWithPricingDTO.setProductHsnCode(product.getHsnCode());
 
-			PricingDetails pricingDetails = pricingDetailsRepository.findByProductId(product.getId());
+			PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(product.getId());
 			if (pricingDetails != null) {
 				productWithPricingDTO.setProductPrice(pricingDetails.getPrice());
 				productWithPricingDTO.setProductStonePrice(pricingDetails.getStonePrice());
-				productWithPricingDTO.setProductMetalValue(pricingDetails.getMetalValue());
+				productWithPricingDTO.setProductMetalPrice(pricingDetails.getMetalPrice());
 				productWithPricingDTO.setProductVadd(pricingDetails.getVadd());
 				productWithPricingDTO.setProductVaddDiscount(pricingDetails.getVaddDiscount());
 				productWithPricingDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());
@@ -105,7 +105,7 @@ public class ProductService {
 			if (pricingDetails != null) {
 				pricingDetails.setPrice(productWithPricingDTO.getProductPrice());
 				pricingDetails.setStonePrice(productWithPricingDTO.getProductStonePrice());
-				pricingDetails.setMetalValue(productWithPricingDTO.getProductMetalValue());
+				pricingDetails.setMetalPrice(productWithPricingDTO.getProductMetalPrice());
 				pricingDetails.setVadd(productWithPricingDTO.getProductVadd());
 				pricingDetails.setVaddDiscount(productWithPricingDTO.getProductVaddDiscount());
 				pricingDetails.setCgst(productWithPricingDTO.getProductCgst());
@@ -141,7 +141,7 @@ public class ProductService {
 			if (pricingDetails != null) {
 				productDTO.setProductPrice(pricingDetails.getPrice());
 				productDTO.setProductStonePrice(pricingDetails.getStonePrice());
-				productDTO.setProductMetalValue(pricingDetails.getMetalValue());
+				productDTO.setProductMetalPrice(pricingDetails.getMetalPrice());
 				productDTO.setProductVadd(pricingDetails.getVadd());
 				productDTO.setProductVaddDiscount(pricingDetails.getVaddDiscount());
 				productDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());

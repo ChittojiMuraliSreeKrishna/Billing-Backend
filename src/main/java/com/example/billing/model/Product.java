@@ -36,6 +36,10 @@ public class Product {
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	@NotNull(message = "Product material is required.")
+	@Column(name = "material", nullable = false)
+	private String material;
+
 	@NotNull(message = "Product purity is required.")
 	@Column(name = "purity", nullable = false)
 	private Double purity;
@@ -126,6 +130,14 @@ public class Product {
 
 	public void setHsnCode(Long hsnCode) {
 		this.hsnCode = hsnCode;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(String material) {
+		this.material = material;
 	}
 
 }

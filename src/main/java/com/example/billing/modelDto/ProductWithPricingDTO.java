@@ -11,7 +11,7 @@ public class ProductWithPricingDTO {
 	private Double productVaddDiscount;
 	private Double productVadd;
 	private Double productTaxableAmount;
-	private Double productMetalValue;
+	private Double productMetalPrice;
 	private Double productStonePrice;
 	private Double productPurity;
 	private Double productGrossWeight;
@@ -99,12 +99,12 @@ public class ProductWithPricingDTO {
 		this.productTaxableAmount = productTaxableAmount;
 	}
 
-	public Double getProductMetalValue() {
-		return productMetalValue;
+	public Double getProductMetalPrice() {
+		return productMetalPrice;
 	}
 
-	public void setProductMetalValue(Double productMetalValue) {
-		this.productMetalValue = productMetalValue;
+	public void setProductMetalPrice(Double productMetalPrice) {
+		this.productMetalPrice = productMetalPrice;
 	}
 
 	public Double getProductStonePrice() {
@@ -157,7 +157,7 @@ public class ProductWithPricingDTO {
 
 	public ProductWithPricingDTO(Long productId, String productName, String productCategory, String productDescription,
 			Double productPrice, Double productCgst, Double productSgst, Double productVaddDiscount, Double productVadd,
-			Double productTaxableAmount, Double productMetalValue, Double productStonePrice, Double productPurity,
+			Double productTaxableAmount, Double productMetalPrice, Double productStonePrice, Double productPurity,
 			Double productGrossWeight, Double productStoneWeight, Double productNetWeight, Long productHsnCode) {
 		super();
 		this.productId = productId;
@@ -170,7 +170,7 @@ public class ProductWithPricingDTO {
 		this.productVaddDiscount = productVaddDiscount;
 		this.productVadd = productVadd;
 		this.productTaxableAmount = productTaxableAmount;
-		this.productMetalValue = productMetalValue;
+		this.productMetalPrice = productMetalPrice;
 		this.productStonePrice = productStonePrice;
 		this.productPurity = productPurity;
 		this.productGrossWeight = productGrossWeight;
