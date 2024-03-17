@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.billing.modelDto.ProductWithPricingDto;
+import com.example.billing.modelDto.ProductWithPricingDTO;
 import com.example.billing.service.ProductService;
 
 @RestController
@@ -25,22 +25,22 @@ public class ProductController {
 	private ProductService productService;
 
 	@PostMapping("/create-product")
-	public ResponseEntity<ProductWithPricingDto> createProduct(
-			@RequestBody ProductWithPricingDto produtWithPricingDto) {
-		ProductWithPricingDto createdProduct = productService.createProduct(produtWithPricingDto);
+	public ResponseEntity<ProductWithPricingDTO> createProduct(
+			@RequestBody ProductWithPricingDTO produtWithPricingDto) {
+		ProductWithPricingDTO createdProduct = productService.createProduct(produtWithPricingDto);
 		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/list-products")
-	public ResponseEntity<List<ProductWithPricingDto>> getAllProducts() {
-		List<ProductWithPricingDto> productsPricing = productService.getAllProducts();
+	public ResponseEntity<List<ProductWithPricingDTO>> getAllProducts() {
+		List<ProductWithPricingDTO> productsPricing = productService.getAllProducts();
 		return new ResponseEntity<>(productsPricing, HttpStatus.OK);
 	}
 
 	@PutMapping("/udpate-product")
-	public ResponseEntity<ProductWithPricingDto> updateProduct(@PathVariable Long productId,
-			@RequestBody ProductWithPricingDto productWithPricingDto) {
-		ProductWithPricingDto updateProduct = productService.updateProduct(productId, productWithPricingDto);
+	public ResponseEntity<ProductWithPricingDTO> updateProduct(@PathVariable Long productId,
+			@RequestBody ProductWithPricingDTO productWithPricingDTO) {
+		ProductWithPricingDTO updateProduct = productService.updateProduct(productId, productWithPricingDTO);
 		if (updateProduct != null) {
 			return new ResponseEntity<>(updateProduct, HttpStatus.OK);
 		} else {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.billing.model.PricingDetails;
 import com.example.billing.model.Product;
-import com.example.billing.modelDto.ProductWithPricingDto;
+import com.example.billing.modelDto.ProductWithPricingDTO;
 import com.example.billing.repository.PricingDetailsRepository;
 import com.example.billing.repository.ProductRepository;
 
@@ -22,86 +22,141 @@ public class ProductService {
 	@Autowired
 	private PricingDetailsRepository pricingDetailsRepository;
 
-	// For Creating Product
-	public ProductWithPricingDto createProduct(ProductWithPricingDto productWithPricingDto) {
-
+	// Create a new product
+	public ProductWithPricingDTO createProduct(ProductWithPricingDTO productWithPricingDTO) {
 		// Mapping Product entity
 		Product product = new Product();
-		product.setProductName(productWithPricingDto.getProductName());
-		product.setProductCategory(productWithPricingDto.getProductCategory());
-		product.setProductDescription(productWithPricingDto.getProductDescription());
+		product.setName(productWithPricingDTO.getProductName());
+		product.setCategory(productWithPricingDTO.getProductCategory());
+		product.setDescription(productWithPricingDTO.getProductDescription());
+		product.setPurity(productWithPricingDTO.getProductPurity());
+		product.setGrossWeight(productWithPricingDTO.getProductGrossWeight());
+		product.setStoneWeight(productWithPricingDTO.getProductStoneWeight());
+		product.setNetWeight(productWithPricingDTO.getProductNetWeight());
+		product.setHsnCode(productWithPricingDTO.getProductHsnCode());
 		Product savedProduct = productRepository.save(product);
 
 		// Mapping Price Details entity
 		PricingDetails pricingDetails = new PricingDetails();
 		pricingDetails.setProduct(savedProduct);
-		pricingDetails.setProductPrice(productWithPricingDto.getProductPrice());
-		pricingDetails.setProductCgst(productWithPricingDto.getProductCgst());
-		pricingDetails.setProductSgst(productWithPricingDto.getProductSgst());
-		pricingDetails.setProductDiscount(productWithPricingDto.getProductDiscount());
-		@SuppressWarnings("unused")
-		PricingDetails savedPricingDetails = pricingDetailsRepository.save(pricingDetails);
+		pricingDetails.setPrice(productWithPricingDTO.getProductPrice());
+		pricingDetails.setStonePrice(productWithPricingDTO.getProductStonePrice());
+		pricingDetails.setMetalValue(productWithPricingDTO.getProductMetalValue());
+		pricingDetails.setVadd(productWithPricingDTO.getProductVadd());
+		pricingDetails.setVaddDiscount(productWithPricingDTO.getProductVaddDiscount());
+		pricingDetails.setCgst(productWithPricingDTO.getProductCgst());
+		pricingDetails.setSgst(productWithPricingDTO.getProductSgst());
+		pricingDetails.setTaxableAmount(productWithPricingDTO.getProductTaxableAmount());
+		pricingDetailsRepository.save(pricingDetails);
 
-		// Updating Id of Product
-		productWithPricingDto.setProductId(savedProduct.getId());
-		return productWithPricingDto;
+		// Update the ID of the DTO
+		productWithPricingDTO.setProductId(savedProduct.getId());
+		return productWithPricingDTO;
 	}
 
-	// For getting All Products
-	public List<ProductWithPricingDto> getAllProducts() {
-		List<ProductWithPricingDto> productWithPricingDtoList = new ArrayList<>();
-
+	// Get all products with pricing details
+	public List<ProductWithPricingDTO> getAllProducts() {
+		List<ProductWithPricingDTO> productWithPricingDtoList = new ArrayList<>();
 		List<Product> products = productRepository.findAll();
 		for (Product product : products) {
-			ProductWithPricingDto productWithPricingDto = new ProductWithPricingDto();
-			productWithPricingDto.setProductId(product.getId());
-			productWithPricingDto.setProductName(product.getProductName());
-			productWithPricingDto.setProductDescription(product.getProductDescription());
-			productWithPricingDto.setProductCategory(product.getProductCategory());
+			ProductWithPricingDTO productWithPricingDTO = new ProductWithPricingDTO();
+			productWithPricingDTO.setProductId(product.getId());
+			productWithPricingDTO.setProductName(product.getName());
+			productWithPricingDTO.setProductDescription(product.getDescription());
+			productWithPricingDTO.setProductCategory(product.getCategory());
+			productWithPricingDTO.setProductPurity(product.getPurity());
+			productWithPricingDTO.setProductGrossWeight(product.getGrossWeight());
+			productWithPricingDTO.setProductStoneWeight(product.getStoneWeight());
+			productWithPricingDTO.setProductNetWeight(product.getNetWeight());
+			productWithPricingDTO.setProductHsnCode(product.getHsnCode());
 
 			PricingDetails pricingDetails = pricingDetailsRepository.findByProductId(product.getId());
 			if (pricingDetails != null) {
-				productWithPricingDto.setProductPrice(pricingDetails.getProductPrice());
-				productWithPricingDto.setProductCgst(pricingDetails.getProductCgst());
-				productWithPricingDto.setProductSgst(pricingDetails.getProductSgst());
-				productWithPricingDto.setProductDiscount(pricingDetails.getProductDiscount());
+				productWithPricingDTO.setProductPrice(pricingDetails.getPrice());
+				productWithPricingDTO.setProductStonePrice(pricingDetails.getStonePrice());
+				productWithPricingDTO.setProductMetalValue(pricingDetails.getMetalValue());
+				productWithPricingDTO.setProductVadd(pricingDetails.getVadd());
+				productWithPricingDTO.setProductVaddDiscount(pricingDetails.getVaddDiscount());
+				productWithPricingDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());
+				productWithPricingDTO.setProductCgst(pricingDetails.getCgst());
+				productWithPricingDTO.setProductSgst(pricingDetails.getSgst());
 			}
-
-			productWithPricingDtoList.add(productWithPricingDto);
+			productWithPricingDtoList.add(productWithPricingDTO);
 		}
-
 		return productWithPricingDtoList;
 	}
 
-	// For updating the Product
-	public ProductWithPricingDto updateProduct(Long productId, ProductWithPricingDto productWithPricingDto) {
+	// Update product details
+	public ProductWithPricingDTO updateProduct(Long productId, ProductWithPricingDTO productWithPricingDTO) {
 		Optional<Product> productOptional = productRepository.findById(productId);
 		if (productOptional.isPresent()) {
 			Product existingProduct = productOptional.get();
-			existingProduct.setProductName(productWithPricingDto.getProductName());
-			existingProduct.setProductDescription(productWithPricingDto.getProductDescription());
-			existingProduct.setProductCategory(productWithPricingDto.getProductCategory());
-			Product savedProduct = productRepository.save(existingProduct);
+			existingProduct.setName(productWithPricingDTO.getProductName());
+			existingProduct.setDescription(productWithPricingDTO.getProductDescription());
+			existingProduct.setCategory(productWithPricingDTO.getProductCategory());
+			existingProduct.setPurity(productWithPricingDTO.getProductPurity());
+			existingProduct.setGrossWeight(productWithPricingDTO.getProductGrossWeight());
+			existingProduct.setStoneWeight(productWithPricingDTO.getProductStoneWeight());
+			existingProduct.setNetWeight(productWithPricingDTO.getProductNetWeight());
+			existingProduct.setHsnCode(productWithPricingDTO.getProductHsnCode());
+			productRepository.save(existingProduct);
 
-			PricingDetails pricingDetails = pricingDetailsRepository.findByProductId(productId);
+			PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(productId);
 			if (pricingDetails != null) {
-				pricingDetails.setProductPrice(productWithPricingDto.getProductPrice());
-				pricingDetails.setProductCgst(productWithPricingDto.getProductCgst());
-				pricingDetails.setProductSgst(productWithPricingDto.getProductSgst());
-				pricingDetails.setProductDiscount(productWithPricingDto.getProductDiscount());
+				pricingDetails.setPrice(productWithPricingDTO.getProductPrice());
+				pricingDetails.setStonePrice(productWithPricingDTO.getProductStonePrice());
+				pricingDetails.setMetalValue(productWithPricingDTO.getProductMetalValue());
+				pricingDetails.setVadd(productWithPricingDTO.getProductVadd());
+				pricingDetails.setVaddDiscount(productWithPricingDTO.getProductVaddDiscount());
+				pricingDetails.setCgst(productWithPricingDTO.getProductCgst());
+				pricingDetails.setSgst(productWithPricingDTO.getProductSgst());
+				pricingDetails.setTaxableAmount(productWithPricingDTO.getProductTaxableAmount());
 				pricingDetailsRepository.save(pricingDetails);
 			}
-			productWithPricingDto.setProductId(savedProduct.getId());
-			return productWithPricingDto;
+			productWithPricingDTO.setProductId(existingProduct.getId());
+			return productWithPricingDTO;
 		} else {
 			return null;
 		}
 	}
 
-	// For Deleting the Product
-	public void deleteProduct(Long productId) {
-		productRepository.deleteById(productId);
-		pricingDetailsRepository.deleteByProductId(productId);
+	// Get Single Product with product Id
+	public ProductWithPricingDTO getProductById(Long productId) {
+		Optional<Product> productOptional = productRepository.findById(productId);
+		if (productOptional.isPresent()) {
+			Product product = productOptional.get();
+			ProductWithPricingDTO productDTO = new ProductWithPricingDTO();
+			productDTO.setProductId(product.getId());
+			productDTO.setProductName(product.getName());
+			productDTO.setProductDescription(product.getDescription());
+			productDTO.setProductCategory(product.getCategory());
+			productDTO.setProductPurity(product.getPurity());
+			productDTO.setProductGrossWeight(product.getGrossWeight());
+			productDTO.setProductStoneWeight(product.getStoneWeight());
+			productDTO.setProductNetWeight(product.getNetWeight());
+			productDTO.setProductHsnCode(product.getHsnCode());
+
+			// Fetch pricing details by product ID
+			PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(productId);
+			if (pricingDetails != null) {
+				productDTO.setProductPrice(pricingDetails.getPrice());
+				productDTO.setProductStonePrice(pricingDetails.getStonePrice());
+				productDTO.setProductMetalValue(pricingDetails.getMetalValue());
+				productDTO.setProductVadd(pricingDetails.getVadd());
+				productDTO.setProductVaddDiscount(pricingDetails.getVaddDiscount());
+				productDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());
+				productDTO.setProductCgst(pricingDetails.getCgst());
+				productDTO.setProductSgst(pricingDetails.getSgst());
+			}
+			return productDTO;
+		} else {
+			return null;
+		}
 	}
 
+	// Delete a product and its pricing details
+	public void deleteProduct(Long productId) {
+		productRepository.deleteById(productId);
+		pricingDetailsRepository.deleteByProduct_Id(productId);
+	}
 }
