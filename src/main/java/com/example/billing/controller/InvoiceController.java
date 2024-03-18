@@ -35,7 +35,7 @@ public class InvoiceController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createBilling(@RequestBody Invoice invoice) {
 		invoiceService.createBilling(invoice);
-		invoiceService.generatePDF(invoice);
+		invoiceService.generatePDFAndSendEmail(invoice);
 		return ResponseEntity.ok("Invoice created successfully and bill generated.");
 
 	}

@@ -58,7 +58,7 @@ public class Product {
 
 	@NotBlank(message = "Product HSNCode is required.")
 	@Column(name = "hsncode", nullable = false)
-	private Long hsnCode;
+	private String hsnCode;
 
 	public long getId() {
 		return id;
@@ -124,11 +124,11 @@ public class Product {
 		this.netWeight = netWeight;
 	}
 
-	public Long getHsnCode() {
+	public String getHsnCode() {
 		return hsnCode;
 	}
 
-	public void setHsnCode(Long hsnCode) {
+	public void setHsnCode(String hsnCode) {
 		this.hsnCode = hsnCode;
 	}
 

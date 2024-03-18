@@ -48,7 +48,17 @@ public class ProductController {
 		}
 	}
 
-	@DeleteMapping("/products/{productId}")
+	@GetMapping("/get-product/{productId}")
+	public ResponseEntity<ProductWithPricingDTO> getProductById(@PathVariable Long productId) {
+		ProductWithPricingDTO product = productService.getProductById(productId);
+		if (product != null) {
+			return new ResponseEntity<>(product, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("/delete-product/{productId}")
 	public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
 		productService.deleteProduct(productId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

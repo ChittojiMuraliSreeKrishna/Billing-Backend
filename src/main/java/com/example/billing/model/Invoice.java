@@ -59,6 +59,9 @@ public class Invoice {
 	@Column(name = "customer_mobile_no", nullable = false)
 	private Long customerMobileNo;
 
+	@Column(name = "customer_email", nullable = true)
+	private String customerEmail;
+
 	@Column(name = "billing_date", nullable = false, updatable = false)
 	private LocalDateTime billingDate;
 
@@ -101,6 +104,14 @@ public class Invoice {
 
 	public Double getTotalCgst() {
 		return totalCgst;
+	}
+
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
 	}
 
 	public void setTotalCgst(Double totalCgst) {
