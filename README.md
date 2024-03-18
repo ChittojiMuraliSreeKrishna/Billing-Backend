@@ -6,7 +6,6 @@ just a basic back-end spring boot application for managing general crud operatio
 > java: 11
 ### dependencies
 
-***
 1. spring-boot-starter-data-jpa
 
 1. spring-boot-starter-security
@@ -24,4 +23,7 @@ just a basic back-end spring boot application for managing general crud operatio
 1. spring-boot-starter-test
 
 1. spring-security-test
-***
+### Inventory ("/inventory")
+|  S.No | Name | End-Path |
+| --------- | ------- | ------- |
+| 1. | Create Product | /create-product |
