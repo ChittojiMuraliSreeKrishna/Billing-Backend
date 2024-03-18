@@ -23,7 +23,9 @@ just a basic back-end spring boot application for managing general crud operatio
 1. spring-boot-starter-test
 
 1. spring-security-test
-### Inventory 
+### Services
+***
+#### I. Inventory 
 > @RequestMapping("/inventory")
 
 |  S.No | Name | End-Path |
