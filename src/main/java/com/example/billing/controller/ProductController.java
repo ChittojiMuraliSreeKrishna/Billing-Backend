@@ -37,7 +37,7 @@ public class ProductController {
 		return new ResponseEntity<>(productsPricing, HttpStatus.OK);
 	}
 
-	@PutMapping("/udpate-product")
+	@PutMapping("/udpate-product/{productId}")
 	public ResponseEntity<ProductWithPricingDTO> updateProduct(@PathVariable Long productId,
 			@RequestBody ProductWithPricingDTO productWithPricingDTO) {
 		ProductWithPricingDTO updateProduct = productService.updateProduct(productId, productWithPricingDTO);

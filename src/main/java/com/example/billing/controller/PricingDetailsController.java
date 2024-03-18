@@ -23,18 +23,18 @@ public class PricingDetailsController {
 		this.pricingDetailsService = pricingDetailsService;
 	}
 
-	@GetMapping("/{productId}")
+	@GetMapping("/get-pricing/{productId}")
 	public PricingDetails getPricingDetailsByProductId(@PathVariable Long productId) {
 		return pricingDetailsService.getPricingDetailsByProductId(productId);
 	}
 
-	@PutMapping("/{productId}")
+	@PutMapping("/update-pricing/{productId}")
 	public PricingDetails updatePricingDetailsByProductId(@PathVariable Long productId,
 			@RequestBody PricingDetails newPricingDetails) {
 		return pricingDetailsService.updatePricingDetailsByProductId(productId, newPricingDetails);
 	}
 
-	@DeleteMapping("/{productId}")
+	@DeleteMapping("/delete-pricing/{productId}")
 	public void deletePricingDetailsByProductId(@PathVariable Long productId) {
 		pricingDetailsService.deletePricingDetailsByProductId(productId);
 	}

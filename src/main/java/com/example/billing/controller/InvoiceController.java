@@ -22,17 +22,17 @@ public class InvoiceController {
 	@Autowired
 	private InvoiceService invoiceService;
 
-	@GetMapping
+	@GetMapping("/list-invoices")
 	public List<Invoice> getAllBillings() {
 		return invoiceService.getAllBillings();
 	}
 
-	@GetMapping("/{billingId}")
+	@GetMapping("/get-invoice/{billingId}")
 	public Optional<Invoice> getBillingById(@PathVariable Long billingId) {
 		return invoiceService.getBillingByBillingId(billingId);
 	}
 
-	@PostMapping("/create")
+	@PostMapping("/create-invoice")
 	public ResponseEntity<String> createBilling(@RequestBody Invoice invoice) {
 		invoiceService.createBilling(invoice);
 		invoiceService.generatePDFAndSendEmail(invoice);
