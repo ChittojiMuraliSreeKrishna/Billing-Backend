@@ -39,7 +39,8 @@ public class ProductService {
 		List<ProductWithPricingDTO> productWithPricingDtoList = new ArrayList<>();
 		List<Product> products = productRepository.findAll();
 		for (Product product : products) {
-			ProductWithPricingDTO productWithPricingDTO = mapToProductWithPricingDTO(product);
+			PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(product.getId());
+			ProductWithPricingDTO productWithPricingDTO = mapToProductWithPricingDTO(product, pricingDetails);
 			productWithPricingDtoList.add(productWithPricingDTO);
 		}
 		return productWithPricingDtoList;
@@ -65,14 +66,16 @@ public class ProductService {
 
 	public ProductWithPricingDTO getProductById(Long productId) {
 		Optional<Product> productOptional = productRepository.findById(productId);
+		PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(productId);
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
-			ProductWithPricingDTO productDTO = mapToProductWithPricingDTO(product);
-			return productDTO;
-		} else {
-			return null; // or throw an exception
+			if (pricingDetails != null) {
+				ProductWithPricingDTO productDTO = mapToProductWithPricingDTO(product, pricingDetails);
+				return productDTO;
+			}
 		}
-	}
+        return null;
+    }
 
 	public ResponseEntity<String> deleteProduct(Long productId) {
 		Optional<Product> productOptional = productRepository.findById(productId);
@@ -114,7 +117,7 @@ public class ProductService {
 		return pricingDetails;
 	}
 
-	private ProductWithPricingDTO mapToProductWithPricingDTO(Product product) {
+	private ProductWithPricingDTO mapToProductWithPricingDTO(Product product, PricingDetails pricingDetails) {
 		ProductWithPricingDTO productWithPricingDTO = new ProductWithPricingDTO();
 		productWithPricingDTO.setProductId(product.getId());
 		productWithPricingDTO.setProductName(product.getName());
@@ -126,6 +129,14 @@ public class ProductService {
 		productWithPricingDTO.setProductNetWeight(product.getNetWeight());
 		productWithPricingDTO.setProductHsnCode(product.getHsnCode());
 		productWithPricingDTO.setProductMaterial(product.getMaterial());
+		productWithPricingDTO.setProductPrice(pricingDetails.getPrice());
+		productWithPricingDTO.setProductStonePrice(pricingDetails.getStonePrice());
+		productWithPricingDTO.setProductMetalPrice(pricingDetails.getMetalPrice());
+		productWithPricingDTO.setProductVadd(pricingDetails.getVadd());
+		productWithPricingDTO.setProductVaddDiscount(pricingDetails.getVaddDiscount());
+		productWithPricingDTO.setProductCgst(pricingDetails.getCgst());
+		productWithPricingDTO.setProductSgst(pricingDetails.getSgst());
+		productWithPricingDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());
 		return productWithPricingDTO;
 	}
 
