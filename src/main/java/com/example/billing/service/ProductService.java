@@ -70,22 +70,21 @@ public class ProductService {
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
 			if (pricingDetails != null) {
-				ProductWithPricingDTO productDTO = mapToProductWithPricingDTO(product, pricingDetails);
-				return productDTO;
+                return mapToProductWithPricingDTO(product, pricingDetails);
 			}
 		}
         return null;
     }
 
-	public ResponseEntity<String> deleteProduct(Long productId) {
+	public void deleteProduct(Long productId) {
 		Optional<Product> productOptional = productRepository.findById(productId);
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
 			pricingDetailsRepository.deleteByProduct_Id(productId);
 			productRepository.delete(product);
-			return ResponseEntity.ok("Product with ID " + productId + " deleted successfully.");
+			ResponseEntity.ok("Product with ID " + productId + " deleted successfully.");
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product with ID " + productId + " not found.");
+			ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product with ID " + productId + " not found.");
 		}
 	}
 
