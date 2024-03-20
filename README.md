@@ -112,3 +112,6 @@ private LocalDateTime billingDate;
 | 1. | Get Pricing | @GetMapping("/get-pricing/{productId}") |
 | 2. | Update Pricing | @PutMapping("/update-pricing/{productId}") |
 | 3. | Delete Pricing | @DeleteMapping("/delete-pricing/{productId}") |
+
+## Invoice PDF
+![Invoice](https://github.com/ChittojiMuraliSreeKrishna/Billing-Backend/assets/62329524/d3c5e1bb-4b27-44a1-a9e1-042bef02bda9)
