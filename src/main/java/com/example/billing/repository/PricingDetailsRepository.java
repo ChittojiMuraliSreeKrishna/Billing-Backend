@@ -6,7 +6,7 @@ import com.example.billing.model.PricingDetails;
 
 public interface PricingDetailsRepository extends JpaRepository<PricingDetails, Long> {
 
-	PricingDetails findByProductId(long id);
+	PricingDetails findByProduct_Id(Long productId);
 
-	void deleteByProductId(Long productId);
+	void deleteByProduct_Id(Long productId);
 }
