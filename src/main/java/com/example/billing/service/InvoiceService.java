@@ -5,6 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,8 +64,8 @@ public class InvoiceService {
 		return billingRepository.save(invoice);
 	}
 
-	private static final Color DARK_BLUE = new Color(46, 77, 97);
-	private static final Color LIGHT_GREY = new Color(136, 136, 136);
+	private static final Color DARK_COLOR = new Color(46, 77, 97);
+	private static final Color LIGHT_COLOR = new Color(136, 136, 136);
 
 	public ResponseEntity<byte[]> generatePDF(Invoice bill) {
 		try (PDDocument document = new PDDocument()) {
@@ -70,83 +73,132 @@ public class InvoiceService {
 			document.addPage(page);
 
 			try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-				contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
 				int tableTopY = 700;
 				int rowHeight = 20;
 				int tableLeftX = 50;
 				int tableWidth = 500;
 				int columnWidth = tableWidth / 6;
 
-				// Draw headers
-				contentStream.beginText();
-				contentStream.newLineAtOffset(tableLeftX, tableTopY);
-				contentStream.showText("Name");
-				contentStream.newLineAtOffset(columnWidth, 0);
-				contentStream.showText("Category");
-				contentStream.newLineAtOffset(columnWidth, 0);
-				contentStream.showText("Weight");
-				contentStream.newLineAtOffset(columnWidth, 0);
-				contentStream.showText("Purity");
-				contentStream.newLineAtOffset(columnWidth, 0);
-				contentStream.showText("Price");
-				contentStream.newLineAtOffset(columnWidth, 0);
-				contentStream.showText("GST");
-				contentStream.endText();
-
-				// Draw rows
+				// Convert Set to List
 				List<Long> productIds = new ArrayList<>(bill.getProductIds());
-				for (int i = 0; i < productIds.size(); i++) {
-					ProductWithPricingDTO product = productService.getProductById(productIds.get(i));
-					if (product != null) {
-						int y = tableTopY - (i + 1) * rowHeight;
+
+				// Draw headers and rows with borders
+				for (int i = 0; i <= productIds.size(); i++) {
+					int y = tableTopY - i * rowHeight;
+					for (int j = 0; j < 6; j++) {
+						int x = tableLeftX + j * columnWidth;
+
+						// Set cell background color
+						Color cellColor = (i == 0) ? DARK_COLOR : LIGHT_COLOR;
+						contentStream.setNonStrokingColor(cellColor);
+
+						// Draw cell border and fill background
+						contentStream.addRect(x, y, columnWidth, rowHeight);
+						contentStream.setNonStrokingColor(cellColor);
+						contentStream.fillAndStroke();
+
+						// Draw text within the cell
 						contentStream.beginText();
-						contentStream.newLineAtOffset(tableLeftX, y);
-						contentStream.showText(product.getProductName());
-						contentStream.newLineAtOffset(columnWidth, 0);
-						contentStream.showText(product.getProductCategory());
-						contentStream.newLineAtOffset(columnWidth, 0);
-						contentStream.showText(String.valueOf(product.getProductNetWeight()));
-						contentStream.newLineAtOffset(columnWidth, 0);
-						contentStream.showText(String.valueOf(product.getProductPurity()));
-						contentStream.newLineAtOffset(columnWidth, 0);
-						contentStream.showText(String.valueOf(product.getProductTaxableAmount()));
-						contentStream.newLineAtOffset(columnWidth, 0);
-						contentStream.showText(String.valueOf(product.getProductSgst() + product.getProductCgst()));
+						contentStream.setFont(PDType1Font.HELVETICA, 12);
+						contentStream.setNonStrokingColor(Color.BLACK);
+						if (i == 0) {
+							contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+							contentStream.setNonStrokingColor(Color.WHITE);
+						}
+						String text = "";
+						switch (j) {
+							case 0:
+								text = "Name";
+								break;
+							case 1:
+								text = "Category";
+								break;
+							case 2:
+								text = "Weight";
+								break;
+							case 3:
+								text = "Purity";
+								break;
+							case 4:
+								text = "Price";
+								break;
+							case 5:
+								text = "GST";
+								break;
+						}
+						if (i > 0) {
+							// For rows, fetch product details
+							ProductWithPricingDTO product = productService.getProductById(productIds.get(i - 1));
+							switch (j) {
+								case 0:
+									text = product.getProductName();
+									break;
+								case 1:
+									text = product.getProductCategory();
+									break;
+								case 2:
+									text = String.valueOf(product.getProductNetWeight() + "gms");
+									break;
+								case 3:
+									text = String.valueOf(product.getProductPurity()) + "K";
+									break;
+								case 4:
+									text = String.valueOf(product.getProductTaxableAmount());
+									break;
+								case 5:
+									text = String.valueOf(product.getProductSgst() + product.getProductCgst());
+									break;
+							}
+						}
+						contentStream.newLineAtOffset(x + columnWidth / 2 - text.length() * 3, y + rowHeight / 2 - 6);
+						contentStream.showText(text);
 						contentStream.endText();
 					}
 				}
-//
-//				// Calculate the bottom y-coordinate of the table
-//				int tableBottomY = tableTopY - (productIds.size() + 1) * rowHeight; // Include the header row
-//
-//// Draw borders around the table with column borders
-//				contentStream.addRect(tableLeftX, tableTopY, tableWidth, (productIds.size() + 1) * rowHeight); // Surround entire table including headers
-//				contentStream.moveTo(tableLeftX + columnWidth, tableTopY);
-//				contentStream.lineTo(tableLeftX + columnWidth, tableBottomY); // Draw first column border
-//				contentStream.moveTo(tableLeftX + 2 * columnWidth, tableTopY);
-//				contentStream.lineTo(tableLeftX + 2 * columnWidth, tableBottomY); // Draw second column border
-//// Repeat for other columns if needed
-//				contentStream.moveTo(tableLeftX + 3 * columnWidth, tableTopY);
-//				contentStream.lineTo(tableLeftX + 3 * columnWidth, tableBottomY); // Draw third column border
-//				contentStream.moveTo(tableLeftX + 4 * columnWidth, tableTopY);
-//				contentStream.lineTo(tableLeftX + 4 * columnWidth, tableBottomY); // Draw fourth column border
-//				contentStream.stroke();
 
+				LocalDateTime billingDateTime = bill.getBillingDate();
+				LocalDate billingDate = billingDateTime.toLocalDate();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				String formattedBillingDate = billingDate.format(formatter);
 
-				// Draw billing details
+				contentStream.setNonStrokingColor(Color.BLUE);
+				contentStream.setFont(PDType1Font.TIMES_BOLD_ITALIC, 14);
+
+				// Calculate the width of "Billing Details:" text
+				float textWidth = PDType1Font.TIMES_BOLD_ITALIC.getStringWidth("Billing Details:") / 1000f * 14f;
+
+				// Calculate the center of the page
+				float centerX = page.getMediaBox().getWidth() / 2f;
+
+				// Calculate the position for "Billing Details:" to center it on the page
+				float startX = centerX - (textWidth / 2f);
+				float startY = tableTopY - (productIds.size() + 2) * rowHeight; // Adjust as needed
+
+				// Display "Billing Details:" centered on the page
 				contentStream.beginText();
-				contentStream.newLineAtOffset(50, tableTopY - (productIds.size() + 2) * rowHeight);
+				contentStream.newLineAtOffset(startX, startY);
 				contentStream.showText("Billing Details:");
-				contentStream.newLineAtOffset(0, -20);
+				contentStream.endText();
+
+				// Set text color and font for the rest of the details
+				contentStream.setFont(PDType1Font.COURIER, 12);
+				contentStream.setNonStrokingColor(Color.BLACK);
+
+				// Display the rest of the details aligned to the left
+				float leftOffset = 50; // Adjust as needed
+				float lineOffset = 20; // Adjust as needed
+
+				contentStream.beginText();
+				contentStream.newLineAtOffset(leftOffset, startY - lineOffset); // Move to the next line
 				contentStream.showText("Total Amount: " + formatCurrency(bill.getTotalInvoice()));
-				contentStream.newLineAtOffset(0, -20);
+				contentStream.newLineAtOffset(0, -lineOffset);
 				contentStream.showText("Total CGST: " + formatCurrency(bill.getTotalCgst()));
-				contentStream.newLineAtOffset(0, -20);
+				contentStream.newLineAtOffset(0, -lineOffset);
 				contentStream.showText("Total SGST: " + formatCurrency(bill.getTotalSgst()));
-				contentStream.newLineAtOffset(0, -20);
+				contentStream.newLineAtOffset(0, -lineOffset);
 				contentStream.showText("Discount: " + formatCurrency(bill.getDiscount()));
-				contentStream.newLineAtOffset(0, -20);
-				contentStream.showText("Billing Date: " + bill.getBillingDate());
+				contentStream.newLineAtOffset(0, -lineOffset);
+				contentStream.showText("Billing Date: " + formattedBillingDate);
 				contentStream.endText();
 			}
 
@@ -181,57 +233,56 @@ public class InvoiceService {
 
 	private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
 
-
-
-//	private void sendEmailWithPDF(String recipientEmail, byte[] pdfBytes) {
-//		// Create properties for SMTP server setup
-//		java.util.Properties props = new java.util.Properties();
-//		props.put("mail.smtp.auth", "true");
-//		props.put("mail.smtp.starttls.enable", "true");
-//		props.put("mail.smtp.host", "smtp.gmail.com"); // Assuming you're using Gmail
-//		props.put("mail.smtp.port", "587");
-//
-//		// Create a Session object
-//		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-//			@Override
-//			protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-//				return new javax.mail.PasswordAuthentication(username, password);
-//			}
-//		});
-//
-//		try {
-//			// Create a MimeMessage object
-//			Message message = new MimeMessage(session);
-//			// Set sender email address
-//			message.setFrom(new InternetAddress(username));
-//			// Set recipient email address
-//			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-//			// Set email subject
-//			message.setSubject("Your Bill");
-//
-//			// Create a multipart message
-//			Multipart multipart = new MimeMultipart();
-//
-//			// Create text part
-//			BodyPart messageBodyPart = new MimeBodyPart();
-//			messageBodyPart.setText("Dear Customer,\n\nPlease find attached your bill.");
-//			multipart.addBodyPart(messageBodyPart);
-//
-//			// Create PDF attachment
-//			messageBodyPart = new MimeBodyPart();
-//			messageBodyPart.setContent(pdfBytes, "application/pdf");
-//			messageBodyPart.setFileName("bill.pdf");
-//			multipart.addBodyPart(messageBodyPart);
-//
-//			// Set the content of the message
-//			message.setContent(multipart);
-//
-//			// Send the message
-//			Transport.send(message);
-//			System.out.println("Email sent successfully to: " + recipientEmail);
-//		} catch (MessagingException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException("Error sending email", e);
-//		}
-//	}
+	// private void sendEmailWithPDF(String recipientEmail, byte[] pdfBytes) {
+	// // Create properties for SMTP server setup
+	// java.util.Properties props = new java.util.Properties();
+	// props.put("mail.smtp.auth", "true");
+	// props.put("mail.smtp.starttls.enable", "true");
+	// props.put("mail.smtp.host", "smtp.gmail.com"); // Assuming you're using Gmail
+	// props.put("mail.smtp.port", "587");
+	//
+	// // Create a Session object
+	// Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+	// @Override
+	// protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+	// return new javax.mail.PasswordAuthentication(username, password);
+	// }
+	// });
+	//
+	// try {
+	// // Create a MimeMessage object
+	// Message message = new MimeMessage(session);
+	// // Set sender email address
+	// message.setFrom(new InternetAddress(username));
+	// // Set recipient email address
+	// message.setRecipients(Message.RecipientType.TO,
+	// InternetAddress.parse(recipientEmail));
+	// // Set email subject
+	// message.setSubject("Your Bill");
+	//
+	// // Create a multipart message
+	// Multipart multipart = new MimeMultipart();
+	//
+	// // Create text part
+	// BodyPart messageBodyPart = new MimeBodyPart();
+	// messageBodyPart.setText("Dear Customer,\n\nPlease find attached your bill.");
+	// multipart.addBodyPart(messageBodyPart);
+	//
+	// // Create PDF attachment
+	// messageBodyPart = new MimeBodyPart();
+	// messageBodyPart.setContent(pdfBytes, "application/pdf");
+	// messageBodyPart.setFileName("bill.pdf");
+	// multipart.addBodyPart(messageBodyPart);
+	//
+	// // Set the content of the message
+	// message.setContent(multipart);
+	//
+	// // Send the message
+	// Transport.send(message);
+	// System.out.println("Email sent successfully to: " + recipientEmail);
+	// } catch (MessagingException e) {
+	// e.printStackTrace();
+	// throw new RuntimeException("Error sending email", e);
+	// }
+	// }
 }
