@@ -33,7 +33,6 @@ public class PricingDetailsService {
 			existingPricingDetails.setTaxableAmount(newPricingDetails.getTaxableAmount());
 			existingPricingDetails.setCgst(newPricingDetails.getCgst());
 			existingPricingDetails.setSgst(newPricingDetails.getSgst());
-			// Save updated pricing details
 			return pricingDetailsRepository.save(existingPricingDetails);
 		}
 		return null;

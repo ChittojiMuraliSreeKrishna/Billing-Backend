@@ -19,6 +19,7 @@ public class ProductWithPricingDTO {
 	private Double productStoneWeight;
 	private Double productNetWeight;
 	private String productHsnCode;
+	private Long productStoreId;
 
 	public Long getProductId() {
 		return productId;
@@ -164,11 +165,20 @@ public class ProductWithPricingDTO {
 		this.productHsnCode = productHsnCode;
 	}
 
+	public Long getProductStoreId() {
+		return productStoreId;
+	}
+
+	public void setProductStoreId(Long productStoreId) {
+		this.productStoreId = productStoreId;
+	}
+
+
 	public ProductWithPricingDTO(Long productId, String productName, String productCategory, String productDescription,
 			Double productPrice, Double productCgst, Double productSgst, Double productVaddDiscount, Double productVadd,
 			Double productTaxableAmount, Double productMetalPrice, Double productStonePrice, Double productPurity,
 			Double productGrossWeight, Double productStoneWeight, Double productNetWeight, String productHsnCode,
-			String productMaterial) {
+			String productMaterial, Long productStoreId) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
@@ -188,6 +198,7 @@ public class ProductWithPricingDTO {
 		this.productNetWeight = productNetWeight;
 		this.productHsnCode = productHsnCode;
 		this.productMaterial = productMaterial;
+		this.productStoreId = productStoreId;
 	}
 
 	public ProductWithPricingDTO() {

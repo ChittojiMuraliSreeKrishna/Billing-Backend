@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.billing.model.Invoice;
 import com.example.billing.service.InvoiceService;
+import com.example.billing.service.PDFGenerationService;
 
 @RestController
 @RequestMapping("/billings")
@@ -21,6 +22,9 @@ public class InvoiceController {
 
 	@Autowired
 	private InvoiceService invoiceService;
+
+	@Autowired
+	private PDFGenerationService pdfGenerationService;
 
 	@GetMapping("/list-invoices")
 	public List<Invoice> getAllBillings() {
@@ -35,7 +39,7 @@ public class InvoiceController {
 	@PostMapping("/create-invoice")
 	public ResponseEntity<String> createBilling(@RequestBody Invoice invoice) {
 		invoiceService.createBilling(invoice);
-		invoiceService.generatePDF(invoice);
+		pdfGenerationService.generatePDF(invoice);
 		return ResponseEntity.ok("Invoice created successfully and bill generated.");
 
 	}

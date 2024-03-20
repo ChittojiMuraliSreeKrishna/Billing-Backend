@@ -1,21 +1,14 @@
 package com.example.billing.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import lombok.*;
 
 @Entity
 @Table(name = "products")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
@@ -59,6 +52,10 @@ public class Product {
 	@NotBlank(message = "Product HSNCode is required.")
 	@Column(name = "hsncode", nullable = false)
 	private String hsnCode;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "store_id", referencedColumnName = "id")
+	private Stores stores; 
 
 	public long getId() {
 		return id;
@@ -139,5 +136,19 @@ public class Product {
 	public void setMaterial(String material) {
 		this.material = material;
 	}
+
+    public Stores getStores() {
+        return stores;
+    }
+
+    public void setStores(Optional<Stores> storesOptional) {
+        Stores defaultStores = getDefaultStores(); 
+        Stores stores = storesOptional.orElse(defaultStores); 
+        this.stores = stores; 
+    }
+    
+    private Stores getDefaultStores() {
+        return new Stores(); 
+    }
 
 }

@@ -2,6 +2,7 @@ package com.example.billing.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import com.example.billing.model.Product;
 import com.example.billing.modelDto.ProductWithPricingDTO;
 import com.example.billing.repository.PricingDetailsRepository;
 import com.example.billing.repository.ProductRepository;
+import com.example.billing.repository.StoresRepository;
+
+import lombok.NonNull;
 
 @Service
 @Transactional
@@ -24,12 +28,17 @@ public class ProductService {
 	private ProductRepository productRepository;
 
 	@Autowired
+	private StoresRepository storesRepository;
+
+	@Autowired
 	private PricingDetailsRepository pricingDetailsRepository;
 
 	public ProductWithPricingDTO createProduct(ProductWithPricingDTO productWithPricingDTO) {
 		Product product = mapToProduct(productWithPricingDTO);
+		Objects.requireNonNull(product, "Product must not be null");
 		Product savedProduct = productRepository.save(product);
 		PricingDetails pricingDetails = mapToPricingDetails(productWithPricingDTO, savedProduct);
+		Objects.requireNonNull(pricingDetails, "Pricing Details must not be null");
 		pricingDetailsRepository.save(pricingDetails);
 		productWithPricingDTO.setProductId(savedProduct.getId());
 		return productWithPricingDTO;
@@ -46,10 +55,12 @@ public class ProductService {
 		return productWithPricingDtoList;
 	}
 
-	public ProductWithPricingDTO updateProduct(Long productId, ProductWithPricingDTO productWithPricingDTO) {
+	public ProductWithPricingDTO updateProduct(@NonNull Long productId,
+			@NonNull ProductWithPricingDTO productWithPricingDTO) {
 		Optional<Product> productOptional = productRepository.findById(productId);
 		if (productOptional.isPresent()) {
 			Product existingProduct = productOptional.get();
+			Objects.requireNonNull(existingProduct, "Existing product must not be null");
 			mapProductUpdate(existingProduct, productWithPricingDTO);
 			productRepository.save(existingProduct);
 			PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(productId);
@@ -64,22 +75,23 @@ public class ProductService {
 		}
 	}
 
-	public ProductWithPricingDTO getProductById(Long productId) {
+	public ProductWithPricingDTO getProductById(@NonNull Long productId) {
 		Optional<Product> productOptional = productRepository.findById(productId);
 		PricingDetails pricingDetails = pricingDetailsRepository.findByProduct_Id(productId);
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
 			if (pricingDetails != null) {
-                return mapToProductWithPricingDTO(product, pricingDetails);
+				return mapToProductWithPricingDTO(product, pricingDetails);
 			}
 		}
-        return null;
-    }
+		return null;
+	}
 
-	public void deleteProduct(Long productId) {
+	public void deleteProduct(@NonNull Long productId) {
 		Optional<Product> productOptional = productRepository.findById(productId);
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
+        Objects.requireNonNull(product, "Product must not be null");
 			pricingDetailsRepository.deleteByProduct_Id(productId);
 			productRepository.delete(product);
 			ResponseEntity.ok("Product with ID " + productId + " deleted successfully.");
@@ -88,7 +100,7 @@ public class ProductService {
 		}
 	}
 
-	private Product mapToProduct(ProductWithPricingDTO productWithPricingDTO) {
+	private Product mapToProduct(@NonNull ProductWithPricingDTO productWithPricingDTO) {
 		Product product = new Product();
 		product.setName(productWithPricingDTO.getProductName());
 		product.setDescription(productWithPricingDTO.getProductDescription());
@@ -99,6 +111,9 @@ public class ProductService {
 		product.setNetWeight(productWithPricingDTO.getProductNetWeight());
 		product.setHsnCode(productWithPricingDTO.getProductHsnCode());
 		product.setMaterial(productWithPricingDTO.getProductMaterial());
+		if(productWithPricingDTO.getProductStoreId() != null) {
+		product.setStores(storesRepository.findById(productWithPricingDTO.getProductStoreId()));
+		}
 		return product;
 	}
 
@@ -136,6 +151,7 @@ public class ProductService {
 		productWithPricingDTO.setProductCgst(pricingDetails.getCgst());
 		productWithPricingDTO.setProductSgst(pricingDetails.getSgst());
 		productWithPricingDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());
+		productWithPricingDTO.setProductStoreId(product.getStores().getId());
 		return productWithPricingDTO;
 	}
 
