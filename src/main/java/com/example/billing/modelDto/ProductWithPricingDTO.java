@@ -1,4 +1,4 @@
-package com.example.billing.modelDto;
+package com.example.billing.modelDTO;
 
 public class ProductWithPricingDTO {
 	private Long productId;

@@ -24,7 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.example.billing.model.Invoice;
-import com.example.billing.modelDto.ProductWithPricingDTO;
+import com.example.billing.modelDTO.ProductWithPricingDTO;
 
 public class PDFGenerationService {
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.billing.model.PricingDetails;
+import com.example.billing.modelDTO.PricingDetailsDTO;
 import com.example.billing.service.PricingDetailsService;
 
 @RestController
@@ -24,13 +25,13 @@ public class PricingDetailsController {
 	}
 
 	@GetMapping("/get-pricing/{productId}")
-	public PricingDetails getPricingDetailsByProductId(@PathVariable Long productId) {
+	public PricingDetailsDTO getPricingDetailsByProductId(@PathVariable Long productId) {
 		return pricingDetailsService.getPricingDetailsByProductId(productId);
 	}
 
 	@PutMapping("/update-pricing/{productId}")
-	public PricingDetails updatePricingDetailsByProductId(@PathVariable Long productId,
-			@RequestBody PricingDetails newPricingDetails) {
+	public PricingDetailsDTO updatePricingDetailsByProductId(@PathVariable Long productId,
+			@RequestBody PricingDetailsDTO newPricingDetails) {
 		return pricingDetailsService.updatePricingDetailsByProductId(productId, newPricingDetails);
 	}
 

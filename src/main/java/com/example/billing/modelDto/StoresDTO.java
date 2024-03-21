@@ -1,67 +1,49 @@
-package com.example.billing.model;
+package com.example.billing.modelDTO;
 
-import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import lombok.*;
+public class StoresDTO {
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-public class Stores {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long storeId;
 
     @NotBlank(message = "Store Name Cannot be empty")
-    @Column(name = "name", nullable = false)
     private String storeName;
 
     @NotBlank(message = "Store Address Cannot be empty")
-    @Column(name = "address", nullable = false)
     private String storeAddress;
 
     @NotNull(message = "Store Phone Number Cannot be empty")
     @Size(min = 10, message = "Phone number must have at least 10 digits")
-    @Column(name = "phone_number", nullable = false)
-    private Long storePhoneNumber;
+    private String storePhoneNumber;
 
     @NotBlank(message = "Store Area Cannot be empty")
-    @Column(name = "area", nullable = false)
     private String storeArea;
 
     @NotBlank(message = "Store Street Cannot be empty")
-    @Column(name = "street", nullable = false)
     private String storeStreet;
-    
+
     @NotBlank(message = "Store City Cannot be empty")
-    @Column(name = "city", nullable = false)
     private String storeCity;
 
     @NotBlank(message = "Store District Cannot be empty")
-    @Column(name = "district", nullable = false)
     private String storeDistrict;
 
     @NotBlank(message = "Store State Cannot be empty")
-    @Column(name = "state", nullable = false)
     private String storeState;
 
     @NotBlank(message = "Store LandMark Cannot be empty")
-    @Column(name = "landmark", nullable = false)
     private String storeLandMark;
 
     @NotNull(message = "Store PinCode cannot be empty")
     @Size(min = 6, message = "Pin code must have at least 6 digits")
-    @Column(name = "pincode", nullable = false)
-    private Long storePinCode;
+    private String storePinCode;
 
-    public long getId() {
-        return id;
+    public long getStoreId() {
+        return storeId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setStoreId(long storeId) {
+        this.storeId = storeId;
     }
 
     public String getStoreName() {
@@ -80,11 +62,11 @@ public class Stores {
         this.storeAddress = storeAddress;
     }
 
-    public Long getStorePhoneNumber() {
+    public String getStorePhoneNumber() {
         return storePhoneNumber;
     }
 
-    public void setStorePhoneNumber(Long storePhoneNumber) {
+    public void setStorePhoneNumber(String storePhoneNumber) {
         this.storePhoneNumber = storePhoneNumber;
     }
 
@@ -136,14 +118,15 @@ public class Stores {
         this.storeLandMark = storeLandMark;
     }
 
-    public Long getStorePinCode() {
+    public String getStorePinCode() {
         return storePinCode;
     }
 
-    public void setStorePinCode(Long storePinCode) {
+    public void setStorePinCode(String storePinCode) {
         this.storePinCode = storePinCode;
     }
 
-    
+    // Getters and setters
 
+   
 }

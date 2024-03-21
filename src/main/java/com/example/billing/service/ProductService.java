@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.billing.model.PricingDetails;
 import com.example.billing.model.Product;
-import com.example.billing.modelDto.ProductWithPricingDTO;
+import com.example.billing.modelDTO.ProductWithPricingDTO;
 import com.example.billing.repository.PricingDetailsRepository;
 import com.example.billing.repository.ProductRepository;
 import com.example.billing.repository.StoresRepository;
@@ -112,7 +112,7 @@ public class ProductService {
 		product.setHsnCode(productWithPricingDTO.getProductHsnCode());
 		product.setMaterial(productWithPricingDTO.getProductMaterial());
 		if(productWithPricingDTO.getProductStoreId() != null) {
-		product.setStores(storesRepository.findById(productWithPricingDTO.getProductStoreId()));
+		product.setStore(storesRepository.findById(productWithPricingDTO.getProductStoreId()));
 		}
 		return product;
 	}
@@ -151,7 +151,7 @@ public class ProductService {
 		productWithPricingDTO.setProductCgst(pricingDetails.getCgst());
 		productWithPricingDTO.setProductSgst(pricingDetails.getSgst());
 		productWithPricingDTO.setProductTaxableAmount(pricingDetails.getTaxableAmount());
-		productWithPricingDTO.setProductStoreId(product.getStores().getId());
+		productWithPricingDTO.setProductStoreId(product.getStore().getId());
 		return productWithPricingDTO;
 	}
 

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.billing.modelDto.ProductWithPricingDTO;
+import com.example.billing.modelDTO.ProductWithPricingDTO;
 import com.example.billing.service.ProductService;
 
 @RestController

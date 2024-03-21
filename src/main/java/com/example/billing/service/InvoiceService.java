@@ -4,16 +4,7 @@ package com.example.billing.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+// import javax.mail.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +22,22 @@ public class InvoiceService {
 	@Autowired
 	private BillingRepository billingRepository;
 
-	private final String username = "your_email@gmail.com"; // Your Gmail username
-	private final String password = "your_password"; // Your Gmail password
-
+	
 	public List<Invoice> getAllBillings() {
 		return billingRepository.findAll();
 	}
-
+	
 	public Optional<Invoice> getBillingByBillingId(Long billingId) {
 		return billingRepository.findById(billingId);
 	}
-
+	
 	public Invoice createBilling(Invoice invoice) {
 		return billingRepository.save(invoice);
 	}
 
+	// private final String username = "your_email@gmail.com"; // Your Gmail username
+	// private final String password = "your_password"; // Your Gmail password
+	
 	// private void sendEmailWithPDF(String recipientEmail, byte[] pdfBytes) {
 	// // Create properties for SMTP server setup
 	// java.util.Properties props = new java.util.Properties();

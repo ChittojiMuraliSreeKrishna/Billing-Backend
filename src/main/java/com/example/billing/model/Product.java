@@ -55,7 +55,7 @@ public class Product {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "store_id", referencedColumnName = "id")
-	private Stores stores; 
+	private Store store; 
 
 	public long getId() {
 		return id;
@@ -137,18 +137,18 @@ public class Product {
 		this.material = material;
 	}
 
-    public Stores getStores() {
-        return stores;
+    public Store getStore() {
+        return store;
     }
 
-    public void setStores(Optional<Stores> storesOptional) {
-        Stores defaultStores = getDefaultStores(); 
-        Stores stores = storesOptional.orElse(defaultStores); 
-        this.stores = stores; 
+    public void setStore(Optional<Store> storeOptional) {
+        Store defaultStore = getDefaultStore(); 
+        Store store = storeOptional.orElse(defaultStore); 
+        this.store = store; 
     }
     
-    private Stores getDefaultStores() {
-        return new Stores(); 
+    private Store getDefaultStore() {
+        return new Store(); 
     }
 
 }
