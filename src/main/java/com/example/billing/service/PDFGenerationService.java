@@ -22,10 +22,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.example.billing.model.Invoice;
 import com.example.billing.modelDTO.ProductWithPricingDTO;
 
+@Service
 public class PDFGenerationService {
 
     @Autowired

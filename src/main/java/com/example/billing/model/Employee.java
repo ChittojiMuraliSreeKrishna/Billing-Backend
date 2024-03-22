@@ -31,7 +31,7 @@ public class Employee {
     @NotNull(message = "Employee Mobile No cannot be empty")
     @Size(min = 10, message = "Mobile number must have at least 10 digits")
     @Column(name = "mobile_number", nullable = false)
-    private Long mobileNo;
+    private String mobileNo;
     
     @NotBlank(message = "Employee Address cannot be empty")
     @Column(name = "address", nullable = false)
@@ -77,11 +77,11 @@ public class Employee {
         this.email = email;
     }
 
-    public Long getMobileNo() {
+    public String getMobileNo() {
         return mobileNo;
     }
 
-    public void setMobileNo(Long mobileNo) {
+    public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
     }
 

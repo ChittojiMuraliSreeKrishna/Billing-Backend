@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.billing.model.Store;
-import com.example.billing.modelDTO.StoresDTO;
+import com.example.billing.modelDTO.StoreDTO;
 import com.example.billing.repository.StoresRepository;
 
 @Service
@@ -19,47 +19,40 @@ public class StoreService {
     @Autowired
     private StoresRepository storesRepository;
 
-    public StoresDTO createStore(StoresDTO storesDTO) {
-        // Convert StoresDTO to entity
-        Store store = mapToEntity(storesDTO);
-        // Save the entity
+    public StoreDTO createStore(StoreDTO storeDTO) {
+        Store store = mapToEntity(storeDTO);
         Store savedStore = storesRepository.save(store);
-        // Convert the saved entity back to DTO and return
         return mapToDTO(savedStore);
     }
 
-    public List<StoresDTO> getAllStores() {
+    public List<StoreDTO> getAllStores() {
         List<Store> stores = storesRepository.findAll();
-        // Convert each entity to DTO and collect into a list
         return stores.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
-    public StoresDTO getStoreById(Long storeId) {
+    public StoreDTO getStoreById(Long storeId) {
         Optional<Store> storeOptional = storesRepository.findById(storeId);
         return storeOptional.map(this::mapToDTO).orElse(null);
     }
 
-    public StoresDTO updateStore(Long storeId, StoresDTO storesDTO) {
+    public StoreDTO updateStore(Long storeId, StoreDTO storeDTO) {
         Optional<Store> storeOptional = storesRepository.findById(storeId);
         if (storeOptional.isPresent()) {
-            // Update the entity with the new data
             Store store = storeOptional.get();
-            // Update store properties with DTO values
-            store.setName(storesDTO.getStoreName());
-            store.setAddress(storesDTO.getStoreAddress());
-            store.setPhoneNumber(storesDTO.getStorePhoneNumber());
-            store.setArea(storesDTO.getStoreArea());
-            store.setStreet(storesDTO.getStoreStreet());
-            store.setCity(storesDTO.getStoreCity());
-            store.setDistrict(storesDTO.getStoreDistrict());
-            store.setState(storesDTO.getStoreState());
-            store.setLandmark(storesDTO.getStoreLandMark());
-            store.setPinCode(storesDTO.getStorePinCode());
+            store.setName(storeDTO.getStoreName());
+            store.setAddress(storeDTO.getStoreAddress());
+            store.setPhoneNumber(storeDTO.getStorePhoneNumber());
+            store.setArea(storeDTO.getStoreArea());
+            store.setStreet(storeDTO.getStoreStreet());
+            store.setCity(storeDTO.getStoreCity());
+            store.setDistrict(storeDTO.getStoreDistrict());
+            store.setState(storeDTO.getStoreState());
+            store.setLandmark(storeDTO.getStoreLandMark());
+            store.setPinCode(storeDTO.getStorePinCode());
             Store updatedStore = storesRepository.save(store);
-            // Convert the updated entity back to DTO and return
             return mapToDTO(updatedStore);
         } else {
-            return null; // or throw an exception
+            return null;
         }
     }
 
@@ -67,36 +60,34 @@ public class StoreService {
         storesRepository.deleteById(storeId);
     }
 
-    // Helper method to convert Store entity to StoresDTO
-    private StoresDTO mapToDTO(Store store) {
-        StoresDTO storesDTO = new StoresDTO();
-        storesDTO.setStoreId(store.getId());
-        storesDTO.setStoreName(store.getName());
-        storesDTO.setStoreAddress(store.getAddress());
-        storesDTO.setStorePhoneNumber(store.getPhoneNumber());
-        storesDTO.setStoreArea(store.getArea());
-        storesDTO.setStoreStreet(store.getStreet());
-        storesDTO.setStoreCity(store.getCity());
-        storesDTO.setStoreDistrict(store.getDistrict());
-        storesDTO.setStoreState(store.getState());
-        storesDTO.setStoreLandMark(store.getLandmark());
-        storesDTO.setStorePinCode(store.getPinCode());
-        return storesDTO;
+    private StoreDTO mapToDTO(Store store) {
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setStoreId(store.getId());
+        storeDTO.setStoreName(store.getName());
+        storeDTO.setStoreAddress(store.getAddress());
+        storeDTO.setStorePhoneNumber(store.getPhoneNumber());
+        storeDTO.setStoreArea(store.getArea());
+        storeDTO.setStoreStreet(store.getStreet());
+        storeDTO.setStoreCity(store.getCity());
+        storeDTO.setStoreDistrict(store.getDistrict());
+        storeDTO.setStoreState(store.getState());
+        storeDTO.setStoreLandMark(store.getLandmark());
+        storeDTO.setStorePinCode(store.getPinCode());
+        return storeDTO;
     }
     
-    // Helper method to convert StoresDTO to Store entity
-    private Store mapToEntity(StoresDTO storesDTO) {
+    private Store mapToEntity(StoreDTO storeDTO) {
         Store store = new Store();
-        store.setName(storesDTO.getStoreName());
-        store.setAddress(storesDTO.getStoreAddress());
-        store.setPhoneNumber(store.getPhoneNumber());
-        store.setArea(storesDTO.getStoreArea());
-        store.setStreet(storesDTO.getStoreStreet());
-        store.setCity(storesDTO.getStoreCity());
-        store.setDistrict(storesDTO.getStoreDistrict());
-        store.setState(storesDTO.getStoreState());
-        store.setLandmark(storesDTO.getStoreLandMark());
-        store.setPinCode(storesDTO.getStorePinCode());
+        store.setName(storeDTO.getStoreName());
+        store.setAddress(storeDTO.getStoreAddress());
+        store.setPhoneNumber(storeDTO.getStorePhoneNumber());
+        store.setArea(storeDTO.getStoreArea());
+        store.setStreet(storeDTO.getStoreStreet());
+        store.setCity(storeDTO.getStoreCity());
+        store.setDistrict(storeDTO.getStoreDistrict());
+        store.setState(storeDTO.getStoreState());
+        store.setLandmark(storeDTO.getStoreLandMark());
+        store.setPinCode(storeDTO.getStorePinCode());
         return store;
     }
 }

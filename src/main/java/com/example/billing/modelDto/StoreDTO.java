@@ -2,7 +2,7 @@ package com.example.billing.modelDTO;
 
 import javax.validation.constraints.*;
 
-public class StoresDTO {
+public class StoreDTO {
 
     private long storeId;
 
@@ -126,7 +126,24 @@ public class StoresDTO {
         this.storePinCode = storePinCode;
     }
 
-    // Getters and setters
+     public StoreDTO() {
+    }
+
+    public StoreDTO(long storeId, String storeName, String storeAddress, String storePhoneNumber, String storeArea,
+                    String storeStreet, String storeCity, String storeDistrict, String storeState,
+                    String storeLandMark, String storePinCode) {
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.storeAddress = storeAddress;
+        this.storePhoneNumber = storePhoneNumber;
+        this.storeArea = storeArea;
+        this.storeStreet = storeStreet;
+        this.storeCity = storeCity;
+        this.storeDistrict = storeDistrict;
+        this.storeState = storeState;
+        this.storeLandMark = storeLandMark;
+        this.storePinCode = storePinCode;
+    }
 
    
 }

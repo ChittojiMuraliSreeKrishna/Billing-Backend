@@ -10,76 +10,90 @@ import javax.validation.constraints.Size;
 public class EmployeeDTO {
     private long id;
     @NotBlank(message = "Employee First Name cannot be empty")
-    private String firstName;
+    private String employeeFirstName;
     
     @NotBlank(message = "Employee Last Name cannot be empty")
-    private String lastName;
+    private String employeeLastName;
 
     @NotBlank(message = "Employee Email cannot be empty")
     @Email(message = "Invalid email format")
-    private String email;
+    private String employeeEmail;
     
     @NotNull(message = "Employee Mobile No cannot be empty")
     @Size(min = 10, message = "Mobile number must have at least 10 digits")
-    private Long mobileNo;
+    private String employeeMobileNo;
     
     @NotBlank(message = "Employee Address cannot be empty")
-    private String address;
+    private String employeeAddress;
     
     @NotBlank(message = "Employee Role cannot be empty")
-    private String role;
+    private String employeeRole;
     
-    private List<StoresDTO> stores;
-    
+    private List<StoreDTO> employeeStores;
+
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public Long getMobileNo() {
-        return mobileNo;
-    }
-    public void setMobileNo(Long mobileNo) {
-        this.mobileNo = mobileNo;
-    }
-    public String getAddress() {
-        return address;
-    }
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    public String getRole() {
-        return role;
-    }
-    public void setRole(String role) {
-        this.role = role;
-    }
-    public List<StoresDTO> getStores() {
-        return stores;
-    }
-    public void setStores(List<StoresDTO> stores) {
-        this.stores = stores;
+
+    public String getEmployeeFirstName() {
+        return employeeFirstName;
     }
 
-    // Constructors, getters, and setters
+    public void setEmployeeFirstName(String employeeFirstName) {
+        this.employeeFirstName = employeeFirstName;
+    }
+
+    public String getEmployeeLastName() {
+        return employeeLastName;
+    }
+
+    public void setEmployeeLastName(String employeeLastName) {
+        this.employeeLastName = employeeLastName;
+    }
+
+    public String getEmployeeEmail() {
+        return employeeEmail;
+    }
+
+    public void setEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
+    }
+
+    public String getEmployeeMobileNo() {
+        return employeeMobileNo;
+    }
+
+    public void setEmployeeMobileNo(String employeeMobileNo) {
+        this.employeeMobileNo = employeeMobileNo;
+    }
+
+    public String getEmployeeAddress() {
+        return employeeAddress;
+    }
+
+    public void setEmployeeAddress(String employeeAddress) {
+        this.employeeAddress = employeeAddress;
+    }
+
+    public String getEmployeeRole() {
+        return employeeRole;
+    }
+
+    public void setEmployeeRole(String employeeRole) {
+        this.employeeRole = employeeRole;
+    }
+
+    public List<StoreDTO> getEmployeeStores() {
+        return employeeStores;
+    }
+
+    public void setEmployeeStores(List<StoreDTO> employeeStores) {
+        this.employeeStores = employeeStores;
+    }        
     
+
 }
