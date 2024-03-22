@@ -1,32 +1,41 @@
 package com.example.billing.service;
 
-import javax.validation.Valid;
-
+import com.example.billing.model.Password;
+import com.example.billing.repository.PasswordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.billing.model.Employee;
-import com.example.billing.model.Password;
-import com.example.billing.repository.EmployeeRepository;
-import com.example.billing.repository.PasswordRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PasswordService {
 
-    @Autowired
-    private PasswordRepository passwordRepository;
+    private final PasswordRepository passwordRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public PasswordService(PasswordRepository passwordRepository) {
+        this.passwordRepository = passwordRepository;
+    }
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    public Password createPassword(Password password) {
+        return passwordRepository.save(password);
+    }
 
-    public void setupPassword(String password, Long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    public List<Password> getAllPasswords() {
+        return passwordRepository.findAll();
+    }
 
-        System.out.println("Setting up password: " + password + " for employee ID: " + employeeId);
+    public Optional<Password> getPasswordById(long id) {
+        return passwordRepository.findById(id);
+    }
+
+    public void deletePassword(long id) {
+        passwordRepository.deleteById(id);
+    }
+
+    public Password updatePassword(long id, Password newPassword) {
+        newPassword.setId(id);
+        return passwordRepository.save(newPassword);
     }
 }
