@@ -12,7 +12,7 @@ import com.example.billing.model.Store;
 @Service
 public class EmailService {
     private final String username = "retailsimple2@gmail.com";
-    private final String password = "nhnmdlzjcpjcsmnv";
+    private final String password = "nhnmdlzjcpjcsmnvcassa";
 
     void sendEmailWithPDF(String recipientEmail, String recipientName, byte[] pdfBytes, Store store, long invoiceId) {
 
