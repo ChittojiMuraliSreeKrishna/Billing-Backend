@@ -26,9 +26,13 @@ import org.springframework.stereotype.Service;
 
 import com.example.billing.model.Invoice;
 import com.example.billing.modelDTO.ProductWithPricingDTO;
+import com.example.billing.service.EmailService;
 
 @Service
 public class PDFGenerationService {
+
+	@Autowired
+    private EmailService emailService;
 
     @Autowired
 	private ProductService productService;
@@ -171,7 +175,8 @@ public class PDFGenerationService {
 			}
 
 			// Save the PDF to a file
-			String desktopPath = System.getProperty("user.home") + "\\Desktop\\";
+			String desktopPath =  "C:\\Users\\Cmkri\\Documents\\";
+			
 			File outputFile = new File(desktopPath + "invoice_" + bill.getId() + ".pdf");
 			document.save(outputFile);
 
@@ -193,6 +198,34 @@ public class PDFGenerationService {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
+
+	public void generateAndSendInvoice(Invoice invoice) {
+        // Generate PDF
+        ResponseEntity<byte[]> pdfResponse = generatePDF(invoice);
+
+        // Check if PDF generation was successful
+        if (pdfResponse.getStatusCode() == HttpStatus.OK) {
+            // Get PDF bytes
+            byte[] pdfBytes = pdfResponse.getBody();
+
+            // Get recipient email from invoice
+            String recipientEmail = invoice.getCustomerEmail();
+
+            // Check if recipient email is not null or empty
+            if (recipientEmail != null && !recipientEmail.isEmpty()) {
+                // Send email with PDF attachment
+                emailService.sendEmailWithPDF(recipientEmail, pdfBytes);
+                // You can also log a success message or handle further actions here
+                System.out.println("Invoice sent successfully to: " + recipientEmail);
+            } else {
+                // Handle the case where customer email is not provided
+                System.out.println("Customer email not provided. Invoice not sent.");
+            }
+        } else {
+            // Handle the case where PDF generation failed
+            System.out.println("PDF generation failed. Invoice not sent.");
+        }
+    }
 
 	private String formatCurrency(double amount) {
 		return String.format("%.2f", amount); 

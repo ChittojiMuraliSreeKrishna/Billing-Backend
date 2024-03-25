@@ -27,12 +27,6 @@ public class PasswordController {
         return new ResponseEntity<>(createdPassword, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Password>> getAllPasswords() {
-        List<Password> passwords = passwordService.getAllPasswords();
-        return new ResponseEntity<>(passwords, HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Password> getPasswordById(@PathVariable("id") long id) {
         Optional<Password> password = passwordService.getPasswordById(id);

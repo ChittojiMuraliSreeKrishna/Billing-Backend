@@ -40,6 +40,7 @@ public class InvoiceController {
 	public ResponseEntity<String> createBilling(@RequestBody Invoice invoice) {
 		invoiceService.createBilling(invoice);
 		pdfGenerationService.generatePDF(invoice);
+		pdfGenerationService.generateAndSendInvoice(invoice);
 		return ResponseEntity.ok("Invoice created successfully and bill generated.");
 
 	}

@@ -6,4 +6,6 @@ import com.example.billing.model.Password;
 
 public interface PasswordRepository extends JpaRepository<Password, Long> {
 
+    Password findByEmployeeEmail(String email);
+
 }

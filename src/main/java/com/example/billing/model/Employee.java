@@ -25,12 +25,12 @@ public class Employee {
     private String lastName;
 
     @NotBlank(message = "Employee Email cannot be empty")
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     
     @NotNull(message = "Employee Mobile No cannot be empty")
     @Size(min = 10, message = "Mobile number must have at least 10 digits")
-    @Column(name = "mobile_number", nullable = false)
+    @Column(name = "mobile_number", nullable = false, unique = true)
     private String mobileNo;
     
     @NotBlank(message = "Employee Address cannot be empty")
