@@ -54,6 +54,17 @@ public class Invoice {
 
 	@Column(name = "billing_date", nullable = false, updatable = false)
 	private LocalDateTime billingDate;
+	
+	@Column(name= "store_id", nullable = false)
+	private long storeId;
+
+	public long getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(long storeId) {
+		this.storeId = storeId;
+	}
 
 	@PrePersist
 	protected void onCreate() {

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -25,7 +25,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.billing.model.Invoice;
+import com.example.billing.model.Store;
 import com.example.billing.modelDTO.ProductWithPricingDTO;
+import com.example.billing.modelDTO.StoreDTO;
+import com.example.billing.repository.ProductRepository;
+import com.example.billing.repository.StoresRepository;
 import com.example.billing.service.EmailService;
 
 @Service
@@ -36,6 +40,14 @@ public class PDFGenerationService {
 
     @Autowired
 	private ProductService productService;
+
+	@Autowired
+	private StoresRepository storesRepository;
+
+	@Autowired
+	private ProductRepository productRepository;
+
+
     private static final Color DARK_COLOR = new Color(46, 77, 97);
 	private static final Color LIGHT_COLOR = new Color(136, 136, 136);
 
@@ -175,10 +187,10 @@ public class PDFGenerationService {
 			}
 
 			// Save the PDF to a file
-			String desktopPath =  "C:\\Users\\Cmkri\\Documents\\";
+			String desktopPath =  "C:\\Users\\murali.chittoji\\Documents\\";
 			
 			File outputFile = new File(desktopPath + "invoice_" + bill.getId() + ".pdf");
-			document.save(outputFile);
+			// document.save(outputFile);
 
 			// Convert PDF to byte array
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -210,11 +222,18 @@ public class PDFGenerationService {
 
             // Get recipient email from invoice
             String recipientEmail = invoice.getCustomerEmail();
+			String recipientName = invoice.getCustomerName();
 
+			
+			
             // Check if recipient email is not null or empty
             if (recipientEmail != null && !recipientEmail.isEmpty()) {
-                // Send email with PDF attachment
-                emailService.sendEmailWithPDF(recipientEmail, pdfBytes);
+				// Send email with PDF attachment
+				Store store = storesRepository.findById(invoice.getStoreId()).orElse(null);
+				
+				long invoiceId = invoice.getId();
+
+				emailService.sendEmailWithPDF(recipientEmail, recipientName, pdfBytes, store, invoiceId);
                 // You can also log a success message or handle further actions here
                 System.out.println("Invoice sent successfully to: " + recipientEmail);
             } else {
